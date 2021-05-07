@@ -1,12 +1,12 @@
 # Dockerfile for backend
-FROM maven:3.8.1-jdk-8-alpine AS MAVEN_TOOL_CHAIN
-COPY pom.xml /tmp/
-COPY src /tmp/src/
+FROM maven:3.8.1-jdk-8-alpine AS MAVEN_BUILD
 WORKDIR /tmp/
+COPY pom.xml .
+COPY src ./src/
 RUN mvn package -DskipTests
  
 FROM tomcat:9.0-jre8-alpine
-COPY --from=MAVEN_TOOL_CHAIN /tmp/target/eschool.jar eschool.jar
+COPY --from=MAVEN_BUILD /tmp/target/eschool.jar eschool.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "eschool.jar"]
 
