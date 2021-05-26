@@ -1,5 +1,5 @@
 # Dockerfile for backend
-FROM maven:3.8.1-jdk-8-alpine AS MAVEN_BUILD
+FROM maven:3.8-jdk-8-alpine AS MAVEN_BUILD
 WORKDIR /tmp/
 COPY pom.xml .
 COPY src ./src/
