@@ -33,7 +33,7 @@ pipeline {
                 milestone(1)
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig_aws',
-                    configs: 'kubernetes-back.yml',
+                    configs: '$workspace/kubernetes-back.yml',
                     enableConfigSubstitution: true
                 )
             }
