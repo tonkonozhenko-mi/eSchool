@@ -1,25 +1,42 @@
-node {
-    def app
-
-    stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
-
-        checkout scm
+pipeline {
+    agent any
+    environment {
+        //be sure to replace "willbla" with your own Docker Hub username
+        DOCKER_IMAGE_NAME_BACK = "maxtonk/eschool-back"
     }
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-
-        app = docker.build("maxtonk/eschool-back")
-    }
-    stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', 'Docker_Hub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
+    stages {
+        stage('checkout'){
+            steps{
+                git branch: 'master', url: 'https://github.com/tonkonozhenko-mi/final_project.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    app = docker.build(DOCKER_IMAGE_NAME_BACK)
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'Docker_Hub') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+        stage('Deploy To Kuber Cluster AWS') {
+            steps {
+                input 'Deploy to Production?'
+                milestone(1)
+                kubernetesDeploy(
+                    kubeconfigId: 'kubeconfig_aws',
+                    configs: 'kubernetes-back.yaml',
+                    enableConfigSubstitution: true
+                )
+            }
         }
     }
 }
