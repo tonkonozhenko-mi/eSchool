@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        //be sure to replace "willbla" with your own Docker Hub username
+        //be sure to replace "maxtonk/eschool-back" with your own Docker Hub username and repository
         DOCKER_IMAGE_NAME_BACK = "maxtonk/eschool-back"
     }
     stages {
