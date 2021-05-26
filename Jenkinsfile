@@ -33,7 +33,7 @@ pipeline {
                 milestone(1)
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'kubernetes-back.yml',
+                    sh "kubectl apply -f kubernetes-back.yml",
                     enableConfigSubstitution: true
                 )
             }
