@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps{
-                git branch: 'master', url: 'https://github.com/tonkonozhenko-mi/final_project.git'
+                git branch: 'master', url: 'https://github.com/tonkonozhenko-mi/eSchool.git'
             }
         }
         stage('Build Docker Image') {
