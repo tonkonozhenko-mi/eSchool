@@ -30,7 +30,6 @@ pipeline {
         stage('Deploy To Kuber Cluster AWS') {
             steps {
                 input 'Deploy to Production?'
-                milestone(1)
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'kubernetes-back.yml',
